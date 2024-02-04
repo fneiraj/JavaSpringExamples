@@ -1,5 +1,8 @@
 package dev.fneira.examples.interfaceprocessor.imp;
 
+import static dev.fneira.examples.interfaceprocessor.imp.InterfaceProxyConstants.CONFIG_ANNOTATIONS;
+
+import dev.fneira.examples.interfaceprocessor.imp.annotations.ProxyHandler;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.List;
@@ -14,13 +17,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
-public class InterfaceProxyPostProcessor implements BeanPostProcessor {
+public class InterfaceProxyBeanPostProcessor implements BeanPostProcessor {
 
   private final ApplicationContext applicationContext;
   private final Environment environment;
 
   @Autowired
-  public InterfaceProxyPostProcessor(
+  public InterfaceProxyBeanPostProcessor(
       final ApplicationContext applicationContext, final Environment environment) {
     this.applicationContext = applicationContext;
     this.environment = environment;
@@ -69,7 +72,7 @@ public class InterfaceProxyPostProcessor implements BeanPostProcessor {
 
   private List<Class<? extends Annotation>> getAnnotationsToProcess() {
     return (List<Class<? extends Annotation>>)
-        environment.getRequiredProperty("interfaces-proxy.annotations", List.class).stream()
+        environment.getRequiredProperty(CONFIG_ANNOTATIONS, List.class).stream()
             .map(
                 annotation -> {
                   try {

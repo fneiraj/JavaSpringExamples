@@ -1,4 +1,4 @@
-package dev.fneira.examples.interfaceprocessor.imp;
+package dev.fneira.examples.interfaceprocessor.imp.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

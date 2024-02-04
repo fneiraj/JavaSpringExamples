@@ -1,6 +1,6 @@
 package dev.fneira.examples.interfaceprocessor.restclient;
 
-import dev.fneira.examples.interfaceprocessor.imp.ProxyHandler;
+import dev.fneira.examples.interfaceprocessor.imp.annotations.ProxyHandler;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

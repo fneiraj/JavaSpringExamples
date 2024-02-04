@@ -1,6 +1,6 @@
 package dev.fneira.examples.interfaceprocessor;
 
-import dev.fneira.examples.interfaceprocessor.imp.EnableInterfaceProxy;
+import dev.fneira.examples.interfaceprocessor.imp.annotations.EnableInterfaceProxy;
 import dev.fneira.examples.interfaceprocessor.interfaces.IMyResourceProvider;
 import dev.fneira.examples.interfaceprocessor.interfaces.IMyRestClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@EnableInterfaceProxy(
-    basePackages = "interfaces-proxy.basePackages",
-    annotations = "interfaces-proxy.annotations")
+@EnableInterfaceProxy
 public class InterfaceProcessorApplication implements CommandLineRunner {
 
   private final IMyResourceProvider myResourceProvider;

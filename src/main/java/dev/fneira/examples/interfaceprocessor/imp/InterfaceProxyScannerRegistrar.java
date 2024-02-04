@@ -1,8 +1,11 @@
 package dev.fneira.examples.interfaceprocessor.imp;
 
+import static dev.fneira.examples.interfaceprocessor.imp.InterfaceProxyConstants.CONFIG_ANNOTATIONS;
+import static dev.fneira.examples.interfaceprocessor.imp.InterfaceProxyConstants.CONFIG_BASE_PACKAGE;
+
+import dev.fneira.examples.interfaceprocessor.imp.annotations.ProxyHandler;
 import java.lang.annotation.Annotation;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
@@ -14,7 +17,6 @@ import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
-import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
@@ -32,8 +34,8 @@ public class InterfaceProxyScannerRegistrar
   @Override
   public void registerBeanDefinitions(
       final AnnotationMetadata importingClassMetadata, final BeanDefinitionRegistry registry) {
-    final String basePackage = getBasePackage(importingClassMetadata);
-    final List<AnnotationWithHandlerClass> annotations = getAnnotations(importingClassMetadata);
+    final String basePackage = getBasePackage();
+    final List<AnnotationWithHandlerClass> annotations = getAnnotations();
 
     final Set<BeanDefinition> beanDefinitions = getBeanDefinition(basePackage, annotations);
 
@@ -48,27 +50,13 @@ public class InterfaceProxyScannerRegistrar
         });
   }
 
-  private String getBasePackage(final AnnotationMetadata importingClassMetadata) {
-    return Optional.ofNullable(
-            AnnotationAttributes.fromMap(
-                importingClassMetadata.getAnnotationAttributes(
-                    EnableInterfaceProxy.class.getName())))
-        .map(annotationAttributes -> annotationAttributes.getStringArray("basePackages"))
-        .map(strings -> strings.length > 0 ? strings[0] : null)
-        .map(basePackage -> environment.getRequiredProperty(basePackage).trim())
-        .orElseThrow(() -> new IllegalArgumentException("basePackages is required"));
+  private String getBasePackage() {
+    return environment.getRequiredProperty(CONFIG_BASE_PACKAGE).trim();
   }
 
-  private List<AnnotationWithHandlerClass> getAnnotations(
-      final AnnotationMetadata importingClassMetadata) {
+  private List<AnnotationWithHandlerClass> getAnnotations() {
     final List<String> annotations =
-        Optional.ofNullable(
-                AnnotationAttributes.fromMap(
-                    importingClassMetadata.getAnnotationAttributes(
-                        EnableInterfaceProxy.class.getName())))
-            .map(annotationAttributes -> annotationAttributes.getString("annotations"))
-            .map(basePackage -> environment.getRequiredProperty(basePackage, List.class))
-            .orElseThrow(() -> new IllegalArgumentException("annotations is required"));
+        environment.getRequiredProperty(CONFIG_ANNOTATIONS, List.class);
 
     return annotations.stream()
         .map(
