@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.StandardReflectionParameterNameDiscoverer;
 
 @Configuration
 public class RestClientHandler implements ProxyMethodHandler {
@@ -70,10 +71,26 @@ public class RestClientHandler implements ProxyMethodHandler {
         final Parameter parameter = method.getParameters()[i];
         if (parameter.isAnnotationPresent(RestClientParam.class)) {
           final RestClientParam restClientParam = parameter.getAnnotation(RestClientParam.class);
+
           params.add(new Param(restClientParam.name(), (String) args[i], restClientParam.type()));
+        } else {
+          params.add(new Param(getParameterName(method, i), (String) args[i], "query"));
         }
       }
       return params;
+    }
+
+    private String getParameterName(final Method method, final int index) {
+      final StandardReflectionParameterNameDiscoverer discoverer =
+          new StandardReflectionParameterNameDiscoverer();
+      final String[] names = discoverer.getParameterNames(method);
+
+      if (names == null) {
+        throw new IllegalArgumentException(
+            "Method " + method.getName() + " does not have parameter names");
+      }
+
+      return names[index];
     }
 
     private static class Param {

@@ -32,6 +32,6 @@ public class InterfaceProcessorApplication implements CommandLineRunner {
     System.out.println(myResourceProvider.getIntResource());
     System.out.println(myResourceProvider.getOtherResource());
     System.out.println(myRestClient.login("my-user", "my-password"));
-    System.out.println(myRestClient.getCreditCards("fneiraj"));
+    System.out.println(myRestClient.getProfile("fneiraj"));
   }
 }

@@ -13,5 +13,5 @@ public interface IMyRestClient {
       @RestClientParam(name = "password", type = "form-data") String password);
 
   @RestClientCfg(method = "GET", path = "/profile")
-  String getCreditCards(@RestClientParam(name = "id") String id);
+  String getProfile(String id);
 }
