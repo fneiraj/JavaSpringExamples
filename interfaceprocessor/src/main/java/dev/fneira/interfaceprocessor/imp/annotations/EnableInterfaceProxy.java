@@ -12,4 +12,6 @@ import org.springframework.context.annotation.Import;
 @Retention(RetentionPolicy.RUNTIME)
 @Import({InterfaceProxyScannerRegistrar.class})
 public @interface EnableInterfaceProxy {
+    String[] basePackages() default {};
+    Class<?>[] annotations();
 }
