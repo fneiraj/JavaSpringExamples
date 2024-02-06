@@ -1,6 +1,0 @@
-
-interfaces-proxy:
-  basePackages: dev.fneira.interfaceprocessor
-  annotations: >
-    dev.fneira.interfaceprocessor.resourceprovider.ResourceProvider,
-    dev.fneira.interfaceprocessor.restclient.RestClient
